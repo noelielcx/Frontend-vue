@@ -23,19 +23,19 @@
           <td colspan="4">Veuillez patienter, chargement des produits...</td>
         </tr>
         <!-- Si le tableau des catégories n'est pas vide -->
-        <tr v-for="produit in data.listeProduits" :key="produit.nom">
+        <tr v-for="produit in data.listeProduits" :key="produit.code">
           <td>{{ produit.nom }}</td>
-          <td>{{ produit.prix }}</td>
-          <td>{{ produit.stock }}</td>
-          <td>{{ produit.commandes }}</td>
+          <td>{{ produit.prixUnitaire }}</td>
+          <td>{{ produit.unitesEnStock }}</td>
+          <td>{{ produit.unitesCommandees }}</td>
         </tr>
         <tr>
           <td>
             <button @click="chargeProduits(data.links.first.href)">
               <img
-                alt="Double Arrow left"
+                alt="Première page"
                 class="logo"
-                src="../../img/keyboard_double_arrow_left_FILL0_wght400_GRAD0_opsz48.png"
+                src="doublegauche.png"
                 width="40"
                 height="40"
               />
@@ -44,9 +44,9 @@
           <td>
             <button @click="chargeProduits(data.links.prev.href)">
               <img
-                alt=" Arrow left"
+                alt="Précédente"
                 class="logo"
-                src="../../img/chevron_left_FILL0_wght400_GRAD0_opsz48.png"
+                src="../Downloads/fgauche.png"
                 width="40"
                 height="40"
               />
@@ -55,9 +55,9 @@
           <td>
             <button @click="chargeProduits(data.links.next.href)">
               <img
-                alt=" Arrow right"
+                alt="Suivante"
                 class="logo"
-                src="../../img/chevron_right_FILL0_wght400_GRAD0_opsz48.png"
+                src="../Downloads/fdroite.png"
                 width="40"
                 height="40"
               />
@@ -66,9 +66,9 @@
           <td>
             <button @click="chargeProduits(data.links.last.href)">
               <img
-                alt="Double Arrow right"
+                alt="Dernière page"
                 class="logo"
-                src="../../img/keyboard_double_arrow_right_FILL0_wght400_GRAD0_opsz48.png"
+                src="doubledroite.png"
                 width="40"
                 height="40"
               />
@@ -82,7 +82,7 @@
 
 <script setup>
 import { reactive, onMounted } from "vue";
-import { BACKEND, dojAjaxRequest } from "../api";
+import { BACKEND, doAjaxRequest } from "../api";
 
 const produitVide = {
   nom: "",
@@ -97,6 +97,12 @@ let data = reactive({
   links: {},
   infoPage: {},
 });
+
+function deleteEntity(entityRef) {
+  doAjaxRequest(entityRef, { method: "DELETE" })
+    .then(chargeCategories)
+    .catch((error) => alert(error.message));
+}
 
 function chargeProduits(href) {
   doAjaxRequest(href)
@@ -121,12 +127,6 @@ function addProduit() {
       data.tabProduit = { ...produitVide };
       chargeProduits();
     })
-    .catch((error) => alert(error.message));
-}
-
-function deleteEntity(entityRef) {
-  doAjaxRequest(entityRef, { method: "DELETE" })
-    .then(chargeCategories)
     .catch((error) => alert(error.message));
 }
 
