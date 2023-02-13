@@ -125,9 +125,9 @@ function addProduit() {
 }
 
 function deleteEntity(entityRef) {
-  doAjaxRequest(entityRef, { method: "DELETE" });
-  //   .then(chargeCategories)
-  //  .catch((error) => alert(error.message));
+  doAjaxRequest(entityRef, { method: "DELETE" })
+    .then(chargeCategories)
+    .catch((error) => alert(error.message));
 }
 
 onMounted(() =>
